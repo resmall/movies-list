@@ -11,13 +11,9 @@ module.exports =  {
 
         try {
             const movies = await getMovies(page);
-            res.send(movies)
+            return res.send(movies)
         } catch (e) {
             next(e)
         }
-    },
-
-    async search (req, res, next) {
-
     }
 }
