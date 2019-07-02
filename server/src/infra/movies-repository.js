@@ -12,7 +12,6 @@ module.exports.makeMoviesDb = ({api}) => {
                 release_date
             }
         })
-        console.log(ret)
 
         return ret;
     }

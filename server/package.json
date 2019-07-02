@@ -4,7 +4,7 @@
   "description": "Movies list ",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./tests/**.test.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
     "axios": "^0.19.0",
     "dotenv": "^8.0.0",
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
   }
 }
