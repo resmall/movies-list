@@ -8,7 +8,6 @@ app.use(cors());
 
 const movieController = require('./controllers/moviesController')
 
-app.get('/', (req,res) => res.send('ok'))
 app.get('/movies', movieController.index);
 
 app.use(function(err, req, res, next) {
