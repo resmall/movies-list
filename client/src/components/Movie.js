@@ -6,18 +6,6 @@ import {
 
 export default class Movie extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
-    state = {
-        title: '',
-        poster_path: '',
-        genres: [],
-        release_date: '',
-        overview: ''
-    }
-
     render() {
         return (
             <div>
@@ -25,9 +13,7 @@ export default class Movie extends React.Component {
                     <img src={this.props.movie.poster_path} alt="move poster" />
                 </div>
                 <div>
-                    <h1>{this.props.movie.title}</h1>
-                    <p>{this.props.movie.overview}</p>
-
+                    <h1><Link to={`movies/${this.props.movie.id}`}>{this.props.movie.title}</Link></h1>
                     <span>{this.props.movie.genres} - Release on: {this.props.movie.release_date}</span>
                 </div>
             </div>
