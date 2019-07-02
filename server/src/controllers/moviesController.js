@@ -1,4 +1,5 @@
 const getMovies = require('../app/get-movies');
+const getDetails = require('../app/get-details');
 
 module.exports =  {
 
@@ -13,7 +14,18 @@ module.exports =  {
             const movies = await getMovies(page);
             return res.send(movies)
         } catch (e) {
-            next(e)
+            next(e);
+        }
+    },
+
+    async show (req, res, next) {
+        const { movie_id } = req.params;
+
+        try {
+            const details = await getDetails(movie_id);
+            return res.send(details);
+        } catch (e) {
+            next(e);
         }
     }
 }
