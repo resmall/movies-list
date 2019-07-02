@@ -1,6 +1,7 @@
 const api = require('../services/api');
+const cache = require('../infra/cache/redis');
 
 module.exports = async () => {
-    let response = await api.get(`/genre/movie/list?api_key=${process.env.API_KEY}`);
-    return response.data.genres;
+    let {data : {genres}} = await api.get(`/genre/movie/list?api_key=${process.env.API_KEY}`);
+    return genres;
 }

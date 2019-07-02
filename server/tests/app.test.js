@@ -5,7 +5,7 @@ const getGenres = require('../src/app/get-genres');
 
 test('should return 20 movies', async () => {
     const movies = await getMovies()
-    expect(movies.results.length).toEqual(20);
+    expect(movies.length).toEqual(20);
 });
 
 test('should return movie genres', async () => {
