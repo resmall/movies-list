@@ -1,12 +1,10 @@
-const api = require('../services/api');
+const getMovies = require('../app/get-movies');
 
 module.exports =  {
 
     async index (req, res, next)  {
         try {
-            // logic
-            let response = await api.get(`/movie/upcoming?api_key=${process.env.API_KEY}`);
-            let movies = response.data;
+            const movies = await getMovies();
             res.send(movies)
         } catch (e) {
             next(e)
