@@ -10,10 +10,10 @@ module.exports = async (page) => {
         await cache.set(id, name);
     });
 
-    let movies = await Promise.all(results.map(async ({title, poster_path, genre_ids, release_date}) => {
+    let movies = await Promise.all(results.map(async ({title, poster_path, genre_ids, release_date, overview}) => {
         let genres = await Promise.all(genre_ids.map(genre_id => cache.get(genre_id)));
         poster_path = `${process.env.TMDB_IMAGE_STORE}${poster_path}`;
-        return {title, poster_path, genres, release_date};
+        return {title, poster_path, genres, release_date, overview};
     }))
 
     return movies;
