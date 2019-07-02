@@ -1,6 +1,11 @@
 const api = require('../services/api');
 
-module.exports = async () => {
-    let response = await api.get(`/movie/upcoming?api_key=${process.env.API_KEY}`);
-    return response.data;
+module.exports = async (page) => {
+    const { data } = await api.get(`/movie/upcoming?api_key=${process.env.API_KEY}&page=${page}`);
+
+    let movies = data.results.map(({title, poster_path, genre_ids, release_date}) => {
+        return {title, poster_path, genre_ids, release_date};
+    })
+
+    return movies;
 }
