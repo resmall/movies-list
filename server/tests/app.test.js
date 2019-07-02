@@ -26,5 +26,5 @@ test('should not return movie details', async () => {
 
 test('should return the movie`s details', async () => {
     const details = await getDetails(429617);
-    expect(Object.keys(details)).toEqual(expect.arrayContaining(['id', 'popularity', 'original_title', 'budget']));
+    expect(Object.keys(details)).toEqual(expect.arrayContaining(['id', 'popularity', 'original_title', 'budget', 'genres']));
 });
