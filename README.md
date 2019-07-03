@@ -43,6 +43,7 @@ I used Jest and created just a few test cases.
 - The same goes for use-cases.
 - Improved exception handling
 - Get the configurations, such as images base url and the like from the config endpoint.
+- Add debounce to React when paginating.
 
 # Build Instructions
 
