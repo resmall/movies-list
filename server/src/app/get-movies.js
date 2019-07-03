@@ -1,5 +1,6 @@
 const cache = require('../infra/cache/redis');
 const { findUpcomingMovies } = require('../infra/db/movieRepository');
+const reloadGenreCache = require('./cache-genre');
 
 module.exports = async (page) => {
     const { results, current_page, total_results, total_pages } = await findUpcomingMovies(page);
