@@ -43,21 +43,37 @@ module.exports =  {
         }
     },
 
-    async search (req, res, next) {
-        let { term, page } = req.query;
+    async search (httpRequest) {
+        let { term, page } = httpRequest.query;
         if (!page) {
             page = 1;
         }
 
         if (!term) {
-            return next(new ValidationError("Missing params", 400))
+            const err = new ValidationError("Missing params", 400)
+            return {
+                body: err.message,
+                statusCode: err.statusCode
+            };
         }
 
         try {
-            const results = await searchMovies(term, page);
-            return res.send(results);
+            const movies = await searchMovies(term, page);
+            return {
+                body: movies.results,
+                statusCode: 200,
+                headers: {
+                    'X-Page': movies.current_page,
+                    'X-Total-Pages': movies.total_pages,
+                    'X-Total': movies.total_results
+                }
+            }
         } catch (e) {
-            next(e);
+            console.error(e)
+            return {
+                body: e.message,
+                statusCode: 400
+            };
         }
     }
 }
