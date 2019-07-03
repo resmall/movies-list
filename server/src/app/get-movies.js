@@ -1,5 +1,4 @@
-const cache = require('../infra/cache/redis');
-const reloadGenreCache = require('./cache-genre')
+const getGenreNames = require('./get-genre-names');
 const { findUpcomingMovies } = require('../infra/db/movieRepository');
 
 module.exports = async (page) => {
@@ -17,7 +16,7 @@ module.exports = async (page) => {
             id,
             title,
             poster_path,
-            genre_ids,
+            genres: genre_ids,
             release_date
         };
     }))
