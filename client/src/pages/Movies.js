@@ -13,19 +13,39 @@ class Movies extends Component {
             isFetching: false,
             page: 1,
             term: '',
-            isSearching: false
+            isSearching: false,
+            apiNav: {
+                totalPages: 0,
+                totalResults: 0,
+                currentPage: 0
+            }
         }
     }
 
     handleScroll = () => {
         if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
+        if (!this.state.apiNav.totalPages === this.state.page) {console.log('fim'); return;}
         let nextPage = this.state.page + 1;
+        console.log("nextpage" + nextPage, this.state.apiNav, "Current state page" + this.state.page )
         this.setState({isFetching: true, page: nextPage});
     }
 
     fetchMoreListItems = async () => {
         const response = await api.get(`movies?page=${this.state.page}`);
-        this.setState({ movies: this.state.movies.concat(response.data), isFetching: false });
+        const apiNav = this.getAPINavParams(response.headers)
+        this.setState({ movies: this.state.movies.concat(response.data), isFetching: false, apiNav });
+    }
+
+    index = async () => {
+        const response = await api.get('movies');
+        const apiNav = this.getAPINavParams(response.headers)
+        this.setState({ movies: response.data, apiNav });
+    }
+
+    fetchSearch = async () => {
+        const response = await api.get(`movies/search?term=${this.state.term}&page=${this.state.page}`);
+        const apiNav = this.getAPINavParams(response.headers)
+        this.setState({ movies: response.data, isSearching: false, apiNav });
     }
 
     async componentDidMount() {
@@ -33,13 +53,16 @@ class Movies extends Component {
         window.addEventListener('scroll', this.handleScroll);
     }
 
-    index = async () => {
-        const response = await api.get('movies');
-        this.setState({ movies: response.data });
+    getAPINavParams = (headers) => {
+        console.log(headers)
+        return {
+            currentPage: parseInt(headers['x-page']),
+            totalPages: parseInt(headers['x-total-pages']),
+            totalResults: parseInt(headers['x-total'])
+        }
     }
 
     componentDidUpdate() {
-        console.log('updated')
         if (this.state.isFetching) {
             this.fetchMoreListItems();
         } else if (this.state.isSearching) {
@@ -57,11 +80,6 @@ class Movies extends Component {
         if (this.term.value) {
             this.setState({term: this.term.value, isSearching: true});
         }
-    }
-
-    fetchSearch = async () => {
-        const response = await api.get(`movies/search?term=${this.state.term}&page=${this.state.page}`);
-        this.setState({ movies: response.data, isSearching: false });
     }
 
     render () {

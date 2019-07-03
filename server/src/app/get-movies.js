@@ -2,7 +2,7 @@ const cache = require('../infra/cache/redis');
 const { findUpcomingMovies } = require('../infra/db/movieRepository');
 
 module.exports = async (page) => {
-    const results = await findUpcomingMovies(page);
+    const { results, current_page, total_results, total_pages } = await findUpcomingMovies(page);
 
     let movies = await Promise.all(results.map(async ({
         title,
@@ -37,5 +37,5 @@ module.exports = async (page) => {
         }
     }
 
-    return movies;
+    return { results: movies, current_page, total_results, total_pages};
 }

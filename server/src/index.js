@@ -4,7 +4,10 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 dotenv.config()
 
-app.use(cors());
+const corsOptions = {
+    exposedHeaders: 'X-Page, X-Total-Pages, X-Total'
+}
+app.use(cors(corsOptions));
 
 const { index, search, show } = require('./controllers/moviesController')
 
@@ -18,8 +21,11 @@ app.get('/movies', function (controller) {
         }
 
         controller(httpRequest).then(httpResponse => {
+            if (httpResponse.headers) {
+                res.set(httpResponse.headers);
+            }
             res.status(httpResponse.statusCode).send(httpResponse.body);
-        }).catch(e => next(e))
+        }).catch(e => next(e));
     }
 }(index));
 app.get('/movies/search', search);

@@ -13,10 +13,15 @@ module.exports =  {
         }
 
         try {
-            movies = await getMovies(page);
+            const movies = await getMovies(page);
             return {
-                body: movies,
-                statusCode: 200
+                body: movies.results,
+                statusCode: 200,
+                headers: {
+                    'X-Page': movies.current_page,
+                    'X-Total-Pages': movies.total_pages,
+                    'X-Total': movies.total_results
+                }
             }
         } catch (e) {
             console.error(e)
