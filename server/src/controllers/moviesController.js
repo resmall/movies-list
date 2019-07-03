@@ -5,18 +5,25 @@ const ValidationError = require('../support/Exceptions').ValidationError
 
 module.exports =  {
 
-    async index (req, res, next)  {
-        let { page } = req.query;
+    async index (httpRequest)  {
+        let { page } = httpRequest.query;
 
         if (!page) {
             page = 1;
         }
 
         try {
-            const movies = await getMovies(page);
-            return res.send(movies)
+            movies = await getMovies(page);
+            return {
+                body: movies,
+                statusCode: 200
+            }
         } catch (e) {
-            next(e);
+            console.error(e)
+            return {
+                body: e.message,
+                statusCode: 400
+            }
         }
     },
 

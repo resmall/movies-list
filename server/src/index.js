@@ -6,11 +6,24 @@ dotenv.config()
 
 app.use(cors());
 
-const movieController = require('./controllers/moviesController')
+const { index, search, show } = require('./controllers/moviesController')
 
-app.get('/movies', movieController.index);
-app.get('/movies/search', movieController.search);
-app.get('/movies/:movie_id', movieController.show);
+app.get('/movies', function (controller) {
+    return (req, res, next) => {
+        const httpRequest = {
+            body: req.body,
+            query: req.query,
+            params: req.params,
+            headers: req.headers
+        }
+
+        controller(httpRequest).then(httpResponse => {
+            res.status(httpResponse.statusCode).send(httpResponse.body);
+        }).catch(e => next(e))
+    }
+}(index));
+app.get('/movies/search', search);
+app.get('/movies/:movie_id', show);
 
 app.use(function (err, req, res, next) {
     console.error(err.stack);
