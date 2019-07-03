@@ -15,30 +15,17 @@ module.exports = async (page) => {
 
         for (let j = 0; j < numGenres; j++) {
             let genre_id = movies[i].genre_ids[j];
-            let genre_name = await cache.get(genre_id);
 
-            if (genre_name) {
-                movies[i].genre_ids[j] = genre_name;
-            } else {
-                await reloadGenreCache();
+            try {
                 let genre_name = await cache.get(genre_id);
                 movies[i].genre_ids[j] = genre_name;
+            } catch {
+                await reloadGenreCache();
+            } finally {
+                movies[i].genre_ids[j] = await cache.get(genre_id);
             }
         }
-
-        // let genres = await Promise.all(genre_ids.map(genre_id => {
-        //     try {
-        //         console.log('cache miss');
-        //         let cached = cache.get(genre_id);
-        //         return cached
-        //     } catch (e) {
-        //         console.log('cache miss');
-        //         reloadGenreCache()
-        //     }
-        // }));
     }
-
-
 
     return movies;
 }

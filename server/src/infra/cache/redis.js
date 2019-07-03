@@ -10,8 +10,12 @@ client.on('error', (err) => {
     console.error('Redis error.', err);
 });
 
-exports.get = (key) => {
-    return client.getAsync(key);
+exports.get = async (key) => {
+    const value = await client.getAsync(key);
+    if (value == null) {
+        throw new Error("Cache miss");
+    }
+    return value
 }
 
 exports.getMany = async (keys) => {
