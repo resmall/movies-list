@@ -30,9 +30,6 @@ class Movies extends Component {
 
             this.setState({page: nextPage});
 
-            console.log(`Paginating for operation: ${this.state.operation} and query for page ${nextPage}`)
-            console.log(`Paginating for operation: ${this.state.operation} and query for page ${nextPage}`)
-
             if (this.state.operation === 'upcoming') {
                 await this.fetchUpcomingMovies(nextPage);
             } else if (this.state.operation === 'search') {
@@ -44,7 +41,6 @@ class Movies extends Component {
 
     fetchUpcomingMovies = async (page) => {
         page = !page ? 1 : page;
-        console.log('fetchupcoming')
         const response = await api.get(`movies?page=${page}`);
         const apiNav = this.getAPINavParams(response.headers);
         if (page > 1) {
@@ -56,7 +52,6 @@ class Movies extends Component {
 
     fetchSearch = async (page) => {
         page = !page ? 1 : page;
-        console.log(`Search term is ${this.term.value} and page is ${page}`)
         const response = await api.get(`movies/search?term=${this.term.value}&page=${page}`);
         const apiNav = this.getAPINavParams(response.headers);
         if (page > 1) {
@@ -84,7 +79,6 @@ class Movies extends Component {
     }
 
     getAPINavParams = (headers) => {
-        console.log(headers)
         return {
             currentPage: parseInt(headers['x-page']),
             totalPages: parseInt(headers['x-total-pages']),
@@ -95,8 +89,6 @@ class Movies extends Component {
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
     }
-
-
 
     render () {
         return (
