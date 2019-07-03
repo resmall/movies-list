@@ -24,10 +24,11 @@ class Movies extends Component {
 
     handleScroll = () => {
         if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
-        if (!this.state.apiNav.totalPages === this.state.page) {console.log('fim'); return;}
-        let nextPage = this.state.page + 1;
-        console.log("nextpage" + nextPage, this.state.apiNav, "Current state page" + this.state.page )
-        this.setState({isFetching: true, page: nextPage});
+        if (this.state.apiNav.totalPages !== this.state.apiNav.currentPage) {
+            let nextPage = this.state.page + 1;
+            console.log("nextpage" + nextPage, this.state.apiNav, "Current state page" + this.state.page )
+            this.setState({isFetching: true, page: nextPage});
+        }
     }
 
     fetchUpcomingMovies = async () => {
