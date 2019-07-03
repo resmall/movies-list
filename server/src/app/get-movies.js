@@ -1,4 +1,4 @@
-const getGenreNames = require('./get-genre-names');
+const cache = require('../infra/cache/redis');
 const { findUpcomingMovies } = require('../infra/db/movieRepository');
 
 module.exports = async (page) => {
@@ -22,17 +22,17 @@ module.exports = async (page) => {
     }))
 
     for (let i = 0; i < movies.length; i++) {
-        const numGenres = movies[i].genre_ids.length;
+        const numGenres = movies[i].genres.length;
 
         for (let j = 0; j < numGenres; j++) {
-            let genre_id = movies[i].genre_ids[j];
+            let genre_id = movies[i].genres[j];
 
             try {
-                movies[i].genre_ids[j] = await cache.get(genre_id);
+                movies[i].genres[j] = await cache.get(genre_id);
             } catch {
                 await reloadGenreCache();
             } finally {
-                movies[i].genre_ids[j] = await cache.get(genre_id);
+                movies[i].genres[j] = await cache.get(genre_id);
             }
         }
     }
