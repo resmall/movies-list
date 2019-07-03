@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import api from '../services/api';
-import { Link } from 'react-router-dom'
-import Movie from '../components/Movie';
 
 class MovieDetail extends Component {
     constructor(props) {
@@ -16,7 +14,6 @@ class MovieDetail extends Component {
 
     async componentDidMount() {
         const response = await api.get(`movies/${this.state.movie_id}`);
-        console.log(response.data.genres)
         this.setState({ movie: response.data, genres: response.data.genres, loaded: true });
     }
 

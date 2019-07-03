@@ -1,6 +1,5 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import api from '../services/api';
-import { Link } from 'react-router-dom'
 import Movie from '../components/Movie';
 
 class Movies extends Component {
@@ -40,7 +39,7 @@ class Movies extends Component {
         return (
             <div>
                 { this.state.movies.map(movie => (
-                    <Movie movie={movie} />
+                    <Movie movie={movie} key={movie.id}/>
                 ))}
                 {this.state.isFetching && 'Fetching more list items...'}
             </div>
