@@ -30,16 +30,10 @@ class Movies extends Component {
         this.setState({isFetching: true, page: nextPage});
     }
 
-    fetchMoreListItems = async () => {
+    fetchUpcomingMovies = async () => {
         const response = await api.get(`movies?page=${this.state.page}`);
         const apiNav = this.getAPINavParams(response.headers)
         this.setState({ movies: this.state.movies.concat(response.data), isFetching: false, apiNav });
-    }
-
-    index = async () => {
-        const response = await api.get('movies');
-        const apiNav = this.getAPINavParams(response.headers)
-        this.setState({ movies: response.data, apiNav });
     }
 
     fetchSearch = async () => {
@@ -49,7 +43,7 @@ class Movies extends Component {
     }
 
     async componentDidMount() {
-        await this.index()
+        await this.fetchUpcomingMovies()
         window.addEventListener('scroll', this.handleScroll);
     }
 
@@ -64,7 +58,7 @@ class Movies extends Component {
 
     componentDidUpdate() {
         if (this.state.isFetching) {
-            this.fetchMoreListItems();
+            this.fetchUpcomingMovies();
         } else if (this.state.isSearching) {
             this.fetchSearch();
         }
