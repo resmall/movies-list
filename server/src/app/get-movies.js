@@ -17,8 +17,7 @@ module.exports = async (page) => {
             let genre_id = movies[i].genre_ids[j];
 
             try {
-                let genre_name = await cache.get(genre_id);
-                movies[i].genre_ids[j] = genre_name;
+                movies[i].genre_ids[j] = await cache.get(genre_id);
             } catch {
                 await reloadGenreCache();
             } finally {
