@@ -1,13 +1,9 @@
-const api = require('../services/api');
 const cache = require('../infra/cache/redis');
 const reloadGenreCache = require('./cache-genre')
+const { findUpcomingMovies } = require('../infra/db/movieRepository');
 
 module.exports = async (page) => {
-    const {
-        data: {
-            results
-        }
-    } = await api.get(`/movie/upcoming?api_key=${process.env.API_KEY}&page=${page}`);
+    const results = await findUpcomingMovies(page);
 
     let movies = await Promise.all(results.map(async ({
         title,
