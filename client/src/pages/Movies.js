@@ -10,37 +10,47 @@ class Movies extends Component {
         super(props)
         this.state = {
             movies: [],
-            isFetching: false,
             page: 1,
             term: '',
-            isSearching: false,
             apiNav: {
                 totalPages: 0,
                 totalResults: 0,
                 currentPage: 0
+            },
+            operation: 'upcoming'
+        }
+    }
+
+    handleScroll = async () => {
+        console.log('hanle')
+        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
+        if (this.state.apiNav.totalPages !== this.state.apiNav.currentPage) {
+            let nextPage = this.state.page + 1;
+
+            this.setState({page: nextPage});
+
+            if (this.state.operation === 'upcoming') {
+                await this.fetchUpcomingMovies(nextPage);
+            } else if (this.state.operation === 'search') {
+                await this.fetchSearch(nextPage);
             }
         }
     }
 
-    handleScroll = () => {
-        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
-        if (this.state.apiNav.totalPages !== this.state.apiNav.currentPage) {
-            let nextPage = this.state.page + 1;
-            console.log("nextpage" + nextPage, this.state.apiNav, "Current state page" + this.state.page )
-            this.setState({isFetching: true, page: nextPage});
-        }
+    fetchUpcomingMovies = async (nextPage) => {
+        console.log('fetchupcoming')
+        const response = await api.get(`movies?page=${nextPage ? 1 : nextPage}`);
+        this.setState({ movies: this.state.movies.concat(response.data), apiNav });
     }
 
-    fetchUpcomingMovies = async () => {
-        const response = await api.get(`movies?page=${this.state.page}`);
-        const apiNav = this.getAPINavParams(response.headers)
-        this.setState({ movies: this.state.movies.concat(response.data), isFetching: false, apiNav });
+    fetchSearch = async (nextPage) => {
+        console.log('fetchsearch')
+        const response = await api.get(`movies/search?term=${this.state.term}&page=${nextPage ? 1 : nextPage}`);
+        this.setState({ movies: response.data, apiNav});
     }
 
-    fetchSearch = async () => {
-        const response = await api.get(`movies/search?term=${this.state.term}&page=${this.state.page}`);
-        const apiNav = this.getAPINavParams(response.headers)
-        this.setState({ movies: response.data, isSearching: false, apiNav });
+    async componentDidUpdate() {
+        console.log('componentdidupdate')
     }
 
     async componentDidMount() {
@@ -57,42 +67,30 @@ class Movies extends Component {
         }
     }
 
-    componentDidUpdate() {
-        if (this.state.isFetching) {
-            this.fetchUpcomingMovies();
-        } else if (this.state.isSearching) {
-            this.fetchSearch();
-        }
-    }
-
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
     }
 
     search = async (e) => {
-        e.preventDefault();
-        console.log('searching', this.term.value)
-        if (this.term.value) {
-            this.setState({term: this.term.value, isSearching: true});
-        }
+    console.log('searching', this.term.value)
+        this.setState({term: this.term.value});
+        await this.fetchSearch();
+        this.setState({term: this.term.value, isSearching: true});
     }
 
     render () {
         return (
             <div>
-                <div>
-                    <form onSubmit={this.search}>
-                        <input type="text" ref={(c) => this.term = c} name="term" />
-                        <button type="button" onClick={this.search}>Search</button>
-                    </form>
+                <form onSubmit={this.search}>
+                    <button type="button" onClick={() => this.router('search')}>Search</button>
+                    <button type="button" onClick={this.search}>Search</button>
+                </form>
 
-                    <button className="button-link" onClick={this.index}>Upcoming Movies</button>
+                <button className="button-link" onClick={this.fetchUpcomingMovies}>Upcoming Movies</button>
 
-                    { this.state.movies.map(movie => (
-                        <Movie movie={movie} key={movie.id}/>
-                    ))}
-                    {this.state.isFetching && 'Fetching more list items...'}
-                </div>
+                { this.state.movies.map(movie => (
+                    <Movie movie={movie} key={movie.id}/>
+                ))}
             </div>
         );
     }
