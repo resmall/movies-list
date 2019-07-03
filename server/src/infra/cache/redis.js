@@ -6,12 +6,12 @@ client.getAsync = util.promisify(client.get)
 client.mgetAsync = util.promisify(client.mget)
 client.setAsync = util.promisify(client.set)
 
-// client.on('connect', function(){
-//     console.log('Redis connection is up');
-// });
+client.on('error', (err) => {
+    console.error('Redis error.', err);
+});
 
-exports.get = async (key) => {
-    return await client.getAsync(key);
+exports.get = (key) => {
+    return client.getAsync(key);
 }
 
 exports.getMany = async (keys) => {
