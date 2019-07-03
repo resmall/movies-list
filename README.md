@@ -49,15 +49,19 @@ I used Jest and created just a few test cases.
 
 The API works on port 3333 by default, and the client app on 3000.
 
-- Client: `http://localhost:3000`
-- Server: `http://localhost:3333`
-
 ## Using docker-compose
 I've dockerized the application, so you can run it in dev mode by just executing the following code:
+
+1. Copy the `.env-example` file to `.env` file
+2. Fill the parameters, especially the `API_KEY` or there will be 401 errors
 
 ```
 docker-compose up
 ```
+
+It should work:
+- Client: `http://localhost:3000`
+- Server: `http://localhost:3333`
 
 ## Set up
 ### Server
