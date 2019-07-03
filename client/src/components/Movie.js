@@ -10,7 +10,7 @@ export default class Movie extends React.Component {
         return (
             <div>
                 <div>
-                    <img src={this.props.movie.poster_path} alt="move poster" />
+                    <img src={this.props.movie.poster_path} alt="movie poster" />
                 </div>
                 <div>
                     <h1><Link to={`movies/${this.props.movie.id}`}>{this.props.movie.title}</Link></h1>
