@@ -26,7 +26,7 @@ class Movies extends Component {
         if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
         if (this.state.apiNav.totalPages !== this.state.apiNav.currentPage) {
 
-            let nextPage = this.state.page + 1;
+            let nextPage = this.state.apiNav.currentPage + 1;
 
             this.setState({page: nextPage});
 
@@ -42,11 +42,16 @@ class Movies extends Component {
         }
     }
 
-    fetchUpcomingMovies = async (nextPage) => {
+    fetchUpcomingMovies = async (page) => {
+        page = !page ? 1 : page;
         console.log('fetchupcoming')
-        const response = await api.get(`movies?page=${nextPage ? 1 : nextPage}`);
+        const response = await api.get(`movies?page=${page}`);
         const apiNav = this.getAPINavParams(response.headers);
-        this.setState({ movies: response.data, apiNav });
+        if (page > 1) {
+            this.setState({ movies: this.state.movies.concat(response.data), apiNav});
+        } else {
+            this.setState({ movies: response.data, apiNav});
+        }
     }
 
     fetchSearch = async (page) => {
@@ -64,15 +69,14 @@ class Movies extends Component {
 
     search = async (e) => {
         e.preventDefault()
-        console.log('searching', )
         this.setState({operation: 'search'});
-        console.log('op is searching')
         await this.fetchSearch();
     }
 
-    // async componentDidUpdate() {
-    //     console.log('componentdidupdate')
-    // }
+    upcoming = async () => {
+        this.setState({operation: 'upcoming'});
+        await this.fetchUpcomingMovies()
+    }
 
     async componentDidMount() {
         await this.fetchUpcomingMovies()
@@ -102,7 +106,7 @@ class Movies extends Component {
                     <button type="button" onClick={this.search}>Search</button>
                 </form>
 
-                <button className="button-link" onClick={this.fetchUpcomingMovies}>Upcoming Movies</button>
+                <button className="button-link" onClick={this.upcoming}>Upcoming Movies</button>
 
                 { this.state.movies.map(movie => (
                     <Movie movie={movie} key={movie.id}/>
