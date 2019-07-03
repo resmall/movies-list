@@ -47,11 +47,25 @@ I used Jest and created just a few test cases.
 
 # Build Instructions
 
+## Using docker-compose
 I've dockerized the application, so you can run it in dev mode by just executing the following code:
 
 ```
 docker-compose up
 ```
+
+## Set up
+### Server
+To setup the API, follow these steps:
+1. Copy the `.env-example` file to `.env` file
+2. Fill the parameters
+3. Run `npm install` to install the dependencies
+4. Run `npm start`
+
+### Client
+To setup the React App
+1. Run `npm install` to install the dependencies
+2. Run `npm start`
 
 # Third Party Libs Used
 
