@@ -30,9 +30,13 @@ class Movies extends Component {
 
             this.setState({page: nextPage});
 
+            console.log(`Paginating for operation: ${this.state.operation} and query for page ${nextPage}`)
+            console.log(`Paginating for operation: ${this.state.operation} and query for page ${nextPage}`)
+
             if (this.state.operation === 'upcoming') {
                 await this.fetchUpcomingMovies(nextPage);
             } else if (this.state.operation === 'search') {
+                console.log('will go for search')
                 await this.fetchSearch(nextPage);
             }
         }
@@ -45,11 +49,17 @@ class Movies extends Component {
         this.setState({ movies: response.data, apiNav });
     }
 
-    fetchSearch = async (nextPage) => {
-        console.log('Search term is: ', this.term.value)
-        const response = await api.get(`movies/search?term=${this.term.value}&page=${nextPage ? 1 : nextPage}`);
+    fetchSearch = async (page) => {
+        page = !page ? 1 : page;
+        console.log(`Search term is ${this.term.value} and page is ${page}`)
+        const response = await api.get(`movies/search?term=${this.term.value}&page=${page}`);
         const apiNav = this.getAPINavParams(response.headers);
-        this.setState({ movies: response.data, apiNav});
+        if (page > 1) {
+            console.log('concat')
+            this.setState({ movies: this.state.movies.concat(response.data), apiNav});
+        } else {
+            this.setState({ movies: response.data, apiNav});
+        }
     }
 
     search = async (e) => {
@@ -57,7 +67,7 @@ class Movies extends Component {
         console.log('searching', )
         this.setState({operation: 'search'});
         console.log('op is searching')
-        await this.fetchSearch(this.term.value);
+        await this.fetchSearch();
     }
 
     // async componentDidUpdate() {
