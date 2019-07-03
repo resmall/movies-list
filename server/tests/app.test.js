@@ -21,11 +21,11 @@ test('should not return movie details', async () => {
 
 test('should return the movie`s details', async () => {
     const details = await getDetails(429617);
-    expect(Object.keys(details)).toEqual(expect.arrayContaining(['id', 'popularity', 'original_title', 'budget', 'genres']));
+    expect(Object.keys(details)).toEqual(expect.arrayContaining(['id', 'title', 'poster_path', 'genres', 'release_date']));
 });
 
 test('should throw exception since search term was not provided', async () => {
     const {results} = await searchMovies('rambo');
     expect(results.length).toBeGreaterThan(1);
-    expect(Object.keys(results[0])).toEqual(expect.arrayContaining(['id', 'popularity', 'original_title', 'genre_ids']));
+    expect(Object.keys(results[0])).toEqual(expect.arrayContaining(['id', 'title', 'poster_path', 'genres', 'release_date']));
 });
