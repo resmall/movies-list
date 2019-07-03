@@ -40,13 +40,21 @@ class Movies extends Component {
     fetchUpcomingMovies = async (nextPage) => {
         console.log('fetchupcoming')
         const response = await api.get(`movies?page=${nextPage ? 1 : nextPage}`);
-        this.setState({ movies: this.state.movies.concat(response.data), apiNav });
+        const apiNav = this.getAPINavParams(response.headers);
+        this.setState({ movies: response.data, apiNav });
     }
 
-    fetchSearch = async (nextPage) => {
-        console.log('fetchsearch')
-        const response = await api.get(`movies/search?term=${this.state.term}&page=${nextPage ? 1 : nextPage}`);
+    fetchSearch = async (term, nextPage) => {
+        console.log('fetchsearch', this.term)
+        const response = await api.get(`movies/search?term=${term}&page=${nextPage ? 1 : nextPage}`);
+        const apiNav = this.getAPINavParams(response.headers);
         this.setState({ movies: response.data, apiNav});
+    }
+
+    search = async (e) => {
+        e.preventDefault()
+        console.log('searching', )
+        await this.fetchSearch(this.term.value);
     }
 
     async componentDidUpdate() {
@@ -71,18 +79,13 @@ class Movies extends Component {
         window.removeEventListener('scroll', this.handleScroll);
     }
 
-    search = async (e) => {
-    console.log('searching', this.term.value)
-        this.setState({term: this.term.value});
-        await this.fetchSearch();
-        this.setState({term: this.term.value, isSearching: true});
-    }
+
 
     render () {
         return (
             <div>
                 <form onSubmit={this.search}>
-                    <button type="button" onClick={() => this.router('search')}>Search</button>
+                    <input type="text" ref={(c) => this.term = c} name="term" />
                     <button type="button" onClick={this.search}>Search</button>
                 </form>
 
