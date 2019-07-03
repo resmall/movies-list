@@ -8,12 +8,17 @@ app.use(cors());
 
 const movieController = require('./controllers/moviesController')
 
-app.get('/movies/:movie_id', movieController.show);
 app.get('/movies', movieController.index);
+app.get('/movies/search', movieController.search);
+app.get('/movies/:movie_id', movieController.show);
 
 app.use(function(err, req, res, next) {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+
+  switch (err.constructor.name) {
+    case "ValidationError":
+      res.status(err.statusCode).send({message: err.message});
+  }
 });
 
 app.listen(3333, function () {
