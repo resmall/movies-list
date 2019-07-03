@@ -8,10 +8,11 @@ class Movies extends Component {
 
     constructor(props) {
         super(props)
+        this.term = ''
         this.state = {
             movies: [],
             page: 1,
-            term: '',
+
             apiNav: {
                 totalPages: 0,
                 totalResults: 0,
@@ -22,9 +23,9 @@ class Movies extends Component {
     }
 
     handleScroll = async () => {
-        console.log('hanle')
         if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
         if (this.state.apiNav.totalPages !== this.state.apiNav.currentPage) {
+
             let nextPage = this.state.page + 1;
 
             this.setState({page: nextPage});
@@ -44,9 +45,9 @@ class Movies extends Component {
         this.setState({ movies: response.data, apiNav });
     }
 
-    fetchSearch = async (term, nextPage) => {
-        console.log('fetchsearch', this.term)
-        const response = await api.get(`movies/search?term=${term}&page=${nextPage ? 1 : nextPage}`);
+    fetchSearch = async (nextPage) => {
+        console.log('Search term is: ', this.term.value)
+        const response = await api.get(`movies/search?term=${this.term.value}&page=${nextPage ? 1 : nextPage}`);
         const apiNav = this.getAPINavParams(response.headers);
         this.setState({ movies: response.data, apiNav});
     }
@@ -54,12 +55,14 @@ class Movies extends Component {
     search = async (e) => {
         e.preventDefault()
         console.log('searching', )
+        this.setState({operation: 'search'});
+        console.log('op is searching')
         await this.fetchSearch(this.term.value);
     }
 
-    async componentDidUpdate() {
-        console.log('componentdidupdate')
-    }
+    // async componentDidUpdate() {
+    //     console.log('componentdidupdate')
+    // }
 
     async componentDidMount() {
         await this.fetchUpcomingMovies()
