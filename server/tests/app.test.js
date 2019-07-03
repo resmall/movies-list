@@ -6,7 +6,7 @@ const searchMovies = require('../src/app/search-movies');
 
 test('should return 20 movies', async () => {
     const movies = await getMovies()
-    expect(movies.length).toEqual(20);
+    expect(movies.results.length).toEqual(20);
 });
 
 test('should not return movie details', async () => {
@@ -25,7 +25,7 @@ test('should return the movie`s details', async () => {
 });
 
 test('should throw exception since search term was not provided', async () => {
-    const searchResult = await searchMovies('rambo');
-    expect(searchResult.length).toBeGreaterThan(1);
-    expect(Object.keys(searchResult[0])).toEqual(expect.arrayContaining(['id', 'popularity', 'original_title', 'genre_ids']));
+    const {results} = await searchMovies('rambo');
+    expect(results.length).toBeGreaterThan(1);
+    expect(Object.keys(results[0])).toEqual(expect.arrayContaining(['id', 'popularity', 'original_title', 'genre_ids']));
 });

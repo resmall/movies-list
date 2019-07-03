@@ -32,14 +32,21 @@ module.exports =  {
         }
     },
 
-    async show (req, res, next) {
-        const { movie_id } = req.params;
+    async show (httpRequest) {
+        const { movie_id } = httpRequest.params;
 
         try {
             const details = await getDetails(movie_id);
-            return res.send(details);
+            return {
+                body: details,
+                statusCode: 200,
+            }
         } catch (e) {
-            next(e);
+            console.error(e)
+            return {
+                body: e.message,
+                statusCode: 400
+            }
         }
     },
 

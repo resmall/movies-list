@@ -9,5 +9,10 @@ module.exports = {
     async findMovieByName(movieName, desiredPage) {
         const { data : { results, page, total_results, total_pages }} = await api.get(`/search/movie?api_key=${process.env.API_KEY}&query=${movieName}&page=${desiredPage}`);
         return { results, current_page: page, total_results, total_pages };
+    },
+
+    async findMovieById(movieId) {
+        const { data } = await api.get(`/movie/${movieId}?api_key=${process.env.API_KEY}`);
+        return data;
     }
 };
