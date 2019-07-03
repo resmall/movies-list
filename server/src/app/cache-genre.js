@@ -1,10 +1,8 @@
-const getGenres = require('./get-genres');
 const cache = require('../infra/cache/redis');
+const { findAllGenres } = require('../infra/db/genreRepository');
 
 module.exports = async () => {
-    // Get from the API.
-    console.log('reloading cache')
-    let genres = await getGenres();
+    let genres = await findAllGenres();
 
     await Promise.all(genres.map(({id, name}) => {
         console.log('cache set', id, name)
