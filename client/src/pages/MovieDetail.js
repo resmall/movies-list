@@ -21,14 +21,14 @@ class MovieDetail extends Component {
         if (this.state.loaded) {
             return (
                 <div>
-                <h1>{this.state.movie.title}</h1>
-                <img src={this.state.movie.poster_path} alt="movie poster"/>
-                <h2>Overview</h2>
-                <p>
-                    {this.state.movie.overview}
-                </p>
-                <span>Release Date: {this.state.movie.release_date}</span>
-                <span>Genres: {this.state.genres.map(({name}) => name).join(', ') }</span>
+                    <h1>{this.state.movie.title}</h1>
+                    <img src={this.state.movie.poster_path} alt="movie poster"/>
+                    <h2>Overview</h2>
+                    <p>
+                        {this.state.movie.overview}
+                    </p>
+                    <div>Release Date: {this.state.movie.release_date}</div>
+                    <div>Genres: {this.state.genres.map(({name}) => name).join(' | ') }</div>
                 </div>
             );
         } else {

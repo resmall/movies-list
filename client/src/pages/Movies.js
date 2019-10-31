@@ -55,7 +55,6 @@ class Movies extends Component {
         const response = await api.get(`movies/search?term=${this.term.value}&page=${page}`);
         const apiNav = this.getAPINavParams(response.headers);
         if (page > 1) {
-            console.log('concat')
             this.setState({ movies: this.state.movies.concat(response.data), apiNav});
         } else {
             this.setState({ movies: response.data, apiNav});
